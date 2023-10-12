@@ -9,8 +9,8 @@
 
 ## User Stories
 
-* As a business, we want to be able to add a customer purchase and corresponding information a list of purchases.
-* As a business, we want to be able to view the list of purchases we have recorded in the list of purchases. 
+* As a business, we want to be able to add a customer purchase and corresponding information to a list of purchases.
+* As a business, we want to be able to view the purchases we have recorded in the list of purchases. 
 * As a business, we want to be able to delete a selected customer purchase because it was refunded/declined.
 * As a business, we want to be able to filter and view the amount of money spent / amount of goods bought in a specific time period we choose.
-* As a business, we want to set a goal of a revenue and see data regarding progress on the revenue goal.
+* As a business, we want to set a revenue goal and see data regarding progress.
