@@ -3,12 +3,19 @@ package model;
 
 import java.util.ArrayList;
 
+// Represents a business' inputted purchase, having its unique transaction ID which has corresponding details.
 public class Purchase {
-    private String customerName;
-    private int dayOfPurchase;
-    private int transactionID;
-    private ArrayList<String> itemsBought;
-    private int transactionAmount;
+    private final String customerName; // stores customer's name of Purchase
+    private final int dayOfPurchase; // stores the day of Purchase
+    private final int transactionID; // stores the transactionID of Purchase
+    private final ArrayList<String> itemsBought; // stores a list of items bought in Purchase
+    private final int transactionAmount; // stores the amount of money spent in Purchase
+
+    /*
+     * REQUIRES: transactionID is a unique int value, not previously existing in listOfPurchases
+     * EFFECTS: each information (e.g. transactionID) is set to the corresponding parameter (e.g. int transactionID)
+     * which is based on user-input.
+     */
 
     public Purchase(int transactionID, String customerName, int dayOfPurchase,
                     ArrayList<String> itemsBought, int transactionAmount) {
@@ -37,25 +44,5 @@ public class Purchase {
 
     public int getTransactionAmount() {
         return transactionAmount;
-    }
-
-    public void setCustomerName(String name) {
-        this.customerName = customerName;
-    }
-
-    public void setDayOfPurchase(int dayOfPurchase) {
-        this.dayOfPurchase = dayOfPurchase;
-    }
-
-    public void setTransactionID(int transactionID) {
-        this.transactionID = transactionID;
-    }
-
-    public void setItemsBought(ArrayList<String> itemsBought) {
-        this.itemsBought = itemsBought;
-    }
-
-    public void setTransactionAmount(int transactionAmount) {
-        this.transactionAmount = transactionAmount;
     }
 }

@@ -7,10 +7,10 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+// Purchase application
 public class PurchaseApp {
     private Scanner obj;
     private ListOfPurchases listOfPurchases;
-    private Purchase purchase;
     private static final DecimalFormat decfor = new DecimalFormat("0.00");
 
     // EFFECTS: runs the Purchase application
@@ -61,27 +61,29 @@ public class PurchaseApp {
             doFilterBasedOnDay();
         } else if (command.equals("i")) {
             doFilterBasedOnAmount();
+        } else if (command.equals("z")) {
+            doViewAllPurchases();
         } else {
             System.out.println("Selection not valid...");
         }
     }
 
     // MODIFIES: this
-    // EFFECTS: initializes listOfAccounts and Account
-
+    // EFFECTS: initializes listOfAccounts
     private void init() {
         obj = new Scanner(System.in);
-        System.out.print("Please enter a revenue goal: ");
-        int revGoals = obj.nextInt();
+//        System.out.print("Please enter a revenue goal: ");
+//        int revGoals = obj.nextInt();
+        int returnValue = revGoalChecker();
         obj.useDelimiter("\n");
-        listOfPurchases = new ListOfPurchases(revGoals);
+        listOfPurchases = new ListOfPurchases(returnValue);
     }
 
     // EFFECTS: displays menu of options to user
     private void displayMenu() {
         System.out.println("\nSelect from:");
+        System.out.println("\tz -> view all purchases in the list");
         System.out.println("\ta -> add purchase");
-        // view list of purhcase
         System.out.println("\tb -> view purchase");
         System.out.println("\tc -> remove purchase");
         System.out.println("\td -> calculate revenue");
@@ -94,9 +96,22 @@ public class PurchaseApp {
     }
 
     // MODIFIES: this
-    // EFFECTS: adds a purchase to the listOfPurchases
+    // EFFECTS: allows to see all purchases in the listOfPurchases
+    private void doViewAllPurchases() {
+        ArrayList<Purchase> allPurchases = listOfPurchases.viewListOfPurchases();
+        ArrayList<Purchase> acc = new ArrayList<>();
+        if (! (allPurchases.isEmpty())) {
+            for (Purchase p : allPurchases) {
+                acc.add(p);
+            }
+            printOutPurchases(acc);
+        } else {
+            System.out.print("The list is empty and has no purchases in it.");
+        }
+    }
 
-
+    // MODIFIES: this
+    // EFFECTS: adds a Purchase instance to the listOfPurchases
     private void doAddPurchase() {
         int filteredTransaction = transChecker();
 
@@ -125,7 +140,6 @@ public class PurchaseApp {
 
     // MODIFIES: this
     // EFFECTS: views specific purchase based on transaction ID
-
     private void doViewPurchase() {
         System.out.print("Enter the transaction ID to view the purchase: ");
         int enteredTransactionID = obj.nextInt();
@@ -140,8 +154,7 @@ public class PurchaseApp {
     }
 
     // MODIFIES: this
-    // EFFECTS: removes a purchase based on transaction id
-
+    // EFFECTS: removes a purchase based on transaction ID
     private void doRemovePurchase() {
         System.out.print("Enter the transaction ID of the purchase you would like to remove: ");
         int removingTransactionID = obj.nextInt();
@@ -157,16 +170,15 @@ public class PurchaseApp {
     }
 
     // MODIFIES: this
-    // EFFECTS: calculated total revenue
-
+    // EFFECTS: calculates total revenue
     private void doCalculateRevenue() {
         int calculatedRevenue = listOfPurchases.calculateRevenue();
         System.out.print("The total revenue is: " + calculatedRevenue);
     }
 
+    // REQUIRES: revenue < revenueGoal
     // MODIFIES: this
     // EFFECTS: calculates % of revGoal completed
-
     private void doCalculateRevenueProgress() {
         float calculatedRevenueProgress = listOfPurchases.calculateRevenueProgress();
         System.out.print("The current revenue progress is: " + decfor.format(calculatedRevenueProgress) + "%");
@@ -174,44 +186,75 @@ public class PurchaseApp {
 
     // MODIFIES: this
     // EFFECTS: calculates average spent in transactions
-
     private void doAvgTransaction() {
         float avgTrans = listOfPurchases.calculateAverageTransactionSpend();
         System.out.print("The average spending per transaction is: " + decfor.format(avgTrans));
     }
 
-    // MODIFIES: this
+    // REQUIRES: listOfPurchases is not empty
     // EFFECTS: calculates average transactions needed to reach the revenue goal
-
     private void doAvgTransRequiredForRevGoal() {
         float transReq = listOfPurchases.calculateAverageTransactionsRequiredToReachRevGoal();
         System.out.print("The amount of transactions "
                 + "(based on average spending) required to meet the revenue goal is: " + decfor.format(transReq));
-
     }
 
-    // MODIFIES: this
-    // EFFECTS: filters transactions to match time parameters
-
+    // REQUIRES: listOfPurchases is not empty
+    // EFFECTS: prompts user to input day parameters and filters transactions to match the given parameters
     private void doFilterBasedOnDay() {
+        System.out.print("Enter the starting day of the filter:  ");
+        int start = obj.nextInt();
+
+        System.out.print("Enter the ending day of the filter:  ");
+        int end = obj.nextInt();
+
+        ArrayList<Purchase> filteredList = listOfPurchases.filterPurchasesBasedOnDay(start,end);
+        if (!(filteredList.isEmpty())) {
+            System.out.print("The following purchases matched your filter: \n");
+            printOutPurchases(filteredList);
+        } else {
+            System.out.println("There are no purchases that match your filter.");
+        }
 
     }
 
-    // MODIFIES: this
-    // EFFECTS: filters transactions to match time parameters
-
+    // REQUIRES: listOfPurchases is not empty
+    // EFFECTS: prompts user to input amount parameters and filters transactions to match the given parameters
     private void doFilterBasedOnAmount() {
+        System.out.print("Enter the starting amount of the filter:  ");
+        int amount1 = obj.nextInt();
+
+        System.out.print("Enter the ending amount of the filter:  ");
+        int amount2 = obj.nextInt();
+
+        ArrayList<Purchase> filteredList2 = listOfPurchases.filterPurchasesBasedOnAmount(amount1,amount2);
+        if (!(filteredList2.isEmpty())) {
+            System.out.print("The following purchases matched your filter: \n");
+            printOutPurchases(filteredList2);
+        } else {
+            System.out.println("There are no purchases that match your filter.");
+        }
 
     }
 
+    // EFFECTS: outputs a single purchase based on its fields
     private void printOutPurchase(Purchase p) {
-        System.out.println("The purchase has the following details: \n Transaction ID: "
+        System.out.println("\n Transaction ID: "
                 + p.getTransactionID() + "\n Customer name: " + p.getCustomerName()
                 + "\n Day of the month of purchase: "
                 + p.getDayOfPurchase() + "\n Items bought: "
                 + p.getItemsBought() + "\n Transaction Amount: " + p.getTransactionAmount());
     }
 
+    // EFFECTS: outputs all purchases in a given listOfPurchases
+    private void printOutPurchases(ArrayList<Purchase> listOfPurchases) {
+        for (Purchase p : listOfPurchases) {
+            printOutPurchase(p);
+            System.out.print("\n");
+        }
+    }
+
+    // EFFECTS: user prompt for entering transaction ID and ensures the transaction ID is unique
     private int transChecker() {
         System.out.print("Enter the transaction ID: ");
         int transID = obj.nextInt();
@@ -223,5 +266,19 @@ public class PurchaseApp {
             return transID;
         }
         return transID;
+    }
+
+    // EFFECTS: user prompt for entering revenue goal and ensures it is more than 0
+    private int revGoalChecker() {
+        System.out.print("Enter your revenue goal: ");
+        int revGoal1 = obj.nextInt();
+        while (revGoal1 == 0) {
+            System.out.println("Please enter a revenue goal which is more than 0: ");
+            revGoal1 = obj.nextInt();
+        }
+        if (revGoal1 > 0) {
+            return revGoal1;
+        }
+        return revGoal1;
     }
 }
