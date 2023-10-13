@@ -5,15 +5,16 @@ import java.util.ArrayList;
 
 public class Purchase {
     private String customerName;
-    private int timeOfPurchase;
+    private int dayOfPurchase;
     private int transactionID;
     private ArrayList<String> itemsBought;
     private int transactionAmount;
 
-    public Purchase(int transactionID, String customerName, int timeOfPurchase, ArrayList<String> itemsBought, int transactionAmount) {
+    public Purchase(int transactionID, String customerName, int dayOfPurchase,
+                    ArrayList<String> itemsBought, int transactionAmount) {
         this.transactionID = transactionID;
         this.customerName = customerName;
-        this.timeOfPurchase = timeOfPurchase;
+        this.dayOfPurchase = dayOfPurchase;
         this.itemsBought = itemsBought;
         this.transactionAmount = transactionAmount;
     }
@@ -26,8 +27,8 @@ public class Purchase {
         return customerName;
     }
 
-    public int getTimeOfPurchase() {
-        return timeOfPurchase;
+    public int getDayOfPurchase() {
+        return dayOfPurchase;
     }
 
     public ArrayList<String> getItemsBought() {
