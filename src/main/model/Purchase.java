@@ -39,4 +39,23 @@ public class Purchase {
         return transactionAmount;
     }
 
+    public void setCustomerName(String name) {
+        this.customerName = customerName;
+    }
+
+    public void setDayOfPurchase(int dayOfPurchase) {
+        this.dayOfPurchase = dayOfPurchase;
+    }
+
+    public void setTransactionID(int transactionID) {
+        this.transactionID = transactionID;
+    }
+
+    public void setItemsBought(ArrayList<String> itemsBought) {
+        this.itemsBought = itemsBought;
+    }
+
+    public void setTransactionAmount(int transactionAmount) {
+        this.transactionAmount = transactionAmount;
+    }
 }

@@ -35,7 +35,9 @@ public class ListOfPurchases {
 
     public void removePurchase(int transactionID) {
         Purchase getter = this.viewSpecificPurchase(transactionID);
-        listOfPurchases.remove(getter);
+        if (getter != null) {
+            listOfPurchases.remove(getter);
+        }
     }
 
     public ArrayList<Purchase> filterPurchasesBasedOnDay(int start, int end) {
