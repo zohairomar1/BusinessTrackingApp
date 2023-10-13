@@ -3,7 +3,6 @@ package model;
 import java.util.ArrayList;
 
 public class ListOfPurchases {
-
     ArrayList<Purchase> listOfPurchases;
     int revGoal;
 
@@ -63,15 +62,19 @@ public class ListOfPurchases {
         return revGoal;
     }
 
-    public double calculateRevenueProgress() {
-        int spending = this.calculateRevenue();
-        return ((spending / revGoal) * 100);
+    public void setRevGoal(int revGoal) {
+        this.revGoal = revGoal;
     }
 
-    public double calculateAverageTransactionsRequiredToReachRevGoal() {
+    public float calculateRevenueProgress() {
+        int spending = this.calculateRevenue();
+        return (((float) spending / revGoal) * 100);
+    }
+
+    public float calculateAverageTransactionsRequiredToReachRevGoal() {
 
         int remainingRevenue = revGoal - this.calculateRevenue();
-        int avgTransaction = this.calculateAverageTransactionSpend();
+        float avgTransaction = this.calculateAverageTransactionSpend();
         return (remainingRevenue / avgTransaction); // how many transactions required on avg to get to rev goal
     }
 
@@ -82,14 +85,11 @@ public class ListOfPurchases {
         }
         return acc4;
     }
+// calculate the average amount spent per transaction in list
 
-    public int calculateAverageTransactionSpend() {
+    public float calculateAverageTransactionSpend() {
         int totalSpending = this.calculateRevenue();
-        int totalItemsBought = 0;
-        for (Purchase p : listOfPurchases) {
-            totalItemsBought = totalItemsBought + p.getItemsBought().size();
-        }
-        return (totalSpending / totalItemsBought);
+        return (float) totalSpending / (listOfPurchases.size());
     }
 
 }

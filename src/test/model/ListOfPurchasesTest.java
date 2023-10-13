@@ -16,6 +16,7 @@ class ListOfPurchasesTest {
     private Purchase testPurchase3;
     private Purchase testPurchase4;
     private Purchase testPurchase5;
+    private Purchase testPurchase6;
 
     @BeforeEach
     void runBefore() {
@@ -25,6 +26,7 @@ class ListOfPurchasesTest {
         testPurchase3 = new Purchase(33,"paul",5,new ArrayList<>(), 30);
         testPurchase4 = new Purchase(44,"drake",7,new ArrayList<>(), 40);
         testPurchase5 = new Purchase(55,"yeat",9,new ArrayList<>(), 20);
+        testPurchase6 = new Purchase(66,"travis",10,new ArrayList<>(), 17);
     }
 
     @Test
@@ -137,7 +139,7 @@ class ListOfPurchasesTest {
     }
 
     @Test
-    void testFilterAPurchasesBasedOnDay() {
+    void testFilterAPurchaseBasedOnDay() {
         testListOfPurchases.addPurchase(testPurchase2);
         ArrayList<Purchase> filteredList = testListOfPurchases.filterPurchasesBasedOnDay(1,2);
         assertEquals(0,filteredList.size());
@@ -200,13 +202,101 @@ class ListOfPurchasesTest {
     }
 
     @Test
-    void testCalculateRevenueProgress() {
+    void testCalculateRevenueSomeProgress() {
         testListOfPurchases.addPurchase(testPurchase);
         testListOfPurchases.addPurchase(testPurchase2);
         testListOfPurchases.addPurchase(testPurchase3);
         testListOfPurchases.addPurchase(testPurchase4);
-        int revenueCalc = testListOfPurchases.calculateRevenue();
-        double revenueProgress = testListOfPurchases.calculateRevenueProgress();
+        float revenueProgress = testListOfPurchases.calculateRevenueProgress();
+        assertEquals(((float) 2/3*100),revenueProgress);
     }
 
+    @Test
+    void testCalculateRevenueNoProgress() {
+        double revenueProgress = testListOfPurchases.calculateRevenueProgress();
+        assertEquals(0,revenueProgress);
+    }
+
+    @Test
+    void testCalculateRevenueProgressAlmostDone() {
+        testListOfPurchases.addPurchase(testPurchase);
+        testListOfPurchases.addPurchase(testPurchase2);
+        testListOfPurchases.setRevGoal(31);
+        float revenueProgress = testListOfPurchases.calculateRevenueProgress();
+        assertEquals(((float) 30/31*100),revenueProgress);
+    }
+
+    @Test
+    void testCalculateRevenueProgressDone() {
+        testListOfPurchases.addPurchase(testPurchase);
+        testListOfPurchases.addPurchase(testPurchase2);
+        testListOfPurchases.setRevGoal(30);
+        double revenueProgress = testListOfPurchases.calculateRevenueProgress();
+        assertEquals(100,revenueProgress);
+    }
+
+    @Test
+    void testCalculateAverageTransactionSpendOnePurchase() {
+        testListOfPurchases.addPurchase(testPurchase);
+        float returnAvgTrans = testListOfPurchases.calculateAverageTransactionSpend();
+        assertEquals(10,returnAvgTrans);
+    }
+
+    @Test
+    void testCalculateAverageTransactionSpendMultiplePurchasesFloat() {
+        testListOfPurchases.addPurchase(testPurchase);
+        testListOfPurchases.addPurchase(testPurchase2);
+        testListOfPurchases.addPurchase(testPurchase3);
+        testListOfPurchases.addPurchase(testPurchase4);
+        testListOfPurchases.addPurchase(testPurchase5);
+        testListOfPurchases.addPurchase(testPurchase6);
+
+        float returnAvgTrans = testListOfPurchases.calculateAverageTransactionSpend();
+        assertEquals((float) 137/6,returnAvgTrans);
+    }
+
+    @Test
+    void testCalculateAverageTransactionSpendMultiplePurchasesWholeAnswer() {
+        testListOfPurchases.addPurchase(testPurchase);
+        testListOfPurchases.addPurchase(testPurchase2);
+        testListOfPurchases.addPurchase(testPurchase3);
+        testListOfPurchases.addPurchase(testPurchase4);
+        testListOfPurchases.addPurchase(testPurchase5);
+
+        float returnAvgTrans = testListOfPurchases.calculateAverageTransactionSpend();
+        assertEquals(24,returnAvgTrans);
+    }
+
+    @Test
+    void testCalculateAverageTransactionsRequiredToReachRevGoal() {
+        testListOfPurchases.addPurchase(testPurchase);
+        testListOfPurchases.addPurchase(testPurchase2);
+        testListOfPurchases.addPurchase(testPurchase3);
+        testListOfPurchases.addPurchase(testPurchase4);
+        testListOfPurchases.addPurchase(testPurchase5);
+
+        float returnAvgTransReq = testListOfPurchases.calculateAverageTransactionsRequiredToReachRevGoal();
+        assertEquals(1.25,returnAvgTransReq);
+    }
+
+    @Test
+    void testCalculateAverageTransactionsRequiredToReachRevGoalOneTransaction() {
+        testListOfPurchases.addPurchase(testPurchase);
+
+        float returnAvgTransReq = testListOfPurchases.calculateAverageTransactionsRequiredToReachRevGoal();
+        assertEquals(14,returnAvgTransReq);
+    }
+
+    @Test
+    void testCalculateAverageTransactionsRequiredToReachRevGoalOne() {
+        testListOfPurchases.addPurchase(testPurchase);
+        testListOfPurchases.addPurchase(testPurchase2);
+        testListOfPurchases.addPurchase(testPurchase3);
+        testListOfPurchases.addPurchase(testPurchase4);
+        testListOfPurchases.addPurchase(testPurchase5);
+        testListOfPurchases.setRevGoal(144);
+
+        float returnAvgTransReq = testListOfPurchases.calculateAverageTransactionsRequiredToReachRevGoal();
+        assertEquals(1,returnAvgTransReq);
+    }
 }
