@@ -1,10 +1,12 @@
 package model;
 
 
+import org.json.JSONObject;
+import persistance.Writable;
 import java.util.ArrayList;
 
 // Represents a business' inputted purchase, having its unique transaction ID which has corresponding details.
-public class Purchase {
+public class Purchase implements Writable {
     private final String customerName; // stores customer's name of Purchase
     private final int dayOfPurchase; // stores the day of Purchase
     private final int transactionID; // stores the transactionID of Purchase
@@ -44,5 +46,16 @@ public class Purchase {
 
     public int getTransactionAmount() {
         return transactionAmount;
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("transactionID", transactionID);
+        json.put("customerName", customerName);
+        json.put("dayOfPurchase", dayOfPurchase);
+        json.put("itemsBought", itemsBought);
+        json.put("transactionAmount", transactionAmount);
+        return json;
     }
 }

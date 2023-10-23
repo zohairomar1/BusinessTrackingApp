@@ -1,9 +1,13 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistance.Writable;
+
 import java.util.ArrayList;
 
 // Represents a List of Purchases, having a revenue goal
-public class ListOfPurchases {
+public class ListOfPurchases implements Writable {
     ArrayList<Purchase> listOfPurchases; // stores the list of Purchase
     int revGoal; // stores the revenue goal
 
@@ -118,6 +122,25 @@ public class ListOfPurchases {
     public float calculateAverageTransactionSpend() {
         int totalSpending = this.calculateRevenue();
         return (float) totalSpending / (listOfPurchases.size());
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("revGoal", revGoal);
+        json.put("listOfPurchases", purchasesToJson());
+        return json;
+    }
+
+    // EFFECTS: returns things in this workroom as a JSON array
+    private JSONArray purchasesToJson() {
+        JSONArray jsonArray = new JSONArray();
+
+        for (Purchase p : listOfPurchases) {
+            jsonArray.put(p.toJson());
+        }
+
+        return jsonArray;
     }
 
 }
