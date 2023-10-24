@@ -5,10 +5,12 @@ import org.json.JSONObject;
 import persistance.Writable;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 // Represents a List of Purchases, having a revenue goal
 public class ListOfPurchases implements Writable {
-    ArrayList<Purchase> listOfPurchases; // stores the list of Purchase
+    List<Purchase> listOfPurchases; // stores the list of Purchase
     int revGoal; // stores the revenue goal
 
 
@@ -141,6 +143,10 @@ public class ListOfPurchases implements Writable {
         }
 
         return jsonArray;
+    }
+
+    public List<Purchase> getPurchases() {
+        return Collections.unmodifiableList(listOfPurchases);
     }
 
 }

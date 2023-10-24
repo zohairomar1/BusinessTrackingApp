@@ -1,0 +1,19 @@
+{
+  "listOfPurchases": [
+    {
+      "transactionID": 1,
+      "customerName": "zohair",
+      "dayOfPurchase": 3,
+      "itemsBought": ["eggs", "milk"],
+      "transactionAmount": 50
+    },
+    {
+      "transactionID": 3,
+      "customerName": "drake",
+      "dayOfPurchase": 5,
+      "itemsBought": ["eggs", "milk", "white"],
+      "transactionAmount": 70
+    }
+  ],
+  "revGoal": 200
+}

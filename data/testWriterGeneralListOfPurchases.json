@@ -1,0 +1,22 @@
+{
+    "revGoal": 200,
+    "listOfPurchases": [
+        {
+            "transactionAmount": 50,
+            "itemsBought": [
+                "bread",
+                "greens"
+            ],
+            "dayOfPurchase": 4,
+            "transactionID": 105,
+            "customerName": "bro"
+        },
+        {
+            "transactionAmount": 80,
+            "itemsBought": ["shoes"],
+            "dayOfPurchase": 7,
+            "transactionID": 55,
+            "customerName": "bro2"
+        }
+    ]
+}

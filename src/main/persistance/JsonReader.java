@@ -33,7 +33,7 @@ public class JsonReader {
     private String readFile(String source) throws IOException {
         StringBuilder contentBuilder = new StringBuilder();
 
-        try (Stream<String> stream = Files.lines( Paths.get(source), StandardCharsets.UTF_8)) {
+        try (Stream<String> stream = Files.lines(Paths.get(source), StandardCharsets.UTF_8)) {
             stream.forEach(s -> contentBuilder.append(s));
         }
 
@@ -42,8 +42,8 @@ public class JsonReader {
 
     // EFFECTS: parses ListOfPurchases from JSON object and returns it
     private ListOfPurchases parseListOfPurchases(JSONObject jsonObject) {
-        int transactionID = jsonObject.getInt("transactionID");
-        ListOfPurchases lop = new ListOfPurchases(transactionID);
+        int revGoal = jsonObject.getInt("revGoal");
+        ListOfPurchases lop = new ListOfPurchases(revGoal);
         addPurchases(lop, jsonObject);
         return lop;
     }
@@ -59,14 +59,20 @@ public class JsonReader {
     }
 
     // MODIFIES: lop
-    // EFFECTS: parses thingy from JSON object and adds it to workroom
+    // EFFECTS: parses Purchase from JSON object and adds it to ListOfPurchases
     private void addPurchase(ListOfPurchases lop, JSONObject jsonObject) {
         int transactionID = jsonObject.getInt("transactionID");
-        String customerName  = jsonObject.getString("customerName");
-        int dayOfPurchase  = jsonObject.getInt("dayOfPurchase");
-        ArrayList<String> itemsBought  = (ArrayList<String>) jsonObject.get("itemsBought");
-        int transactionAmount  = jsonObject.getInt("transactionAmount");
-        Purchase purchase = new Purchase(transactionID,customerName,dayOfPurchase,itemsBought,transactionAmount);
+        String customerName = jsonObject.getString("customerName");
+        int dayOfPurchase = jsonObject.getInt("dayOfPurchase");
+        JSONArray listOfItemsBought = jsonObject.getJSONArray("itemsBought");
+        ArrayList<String> listData = new ArrayList<String>();
+        if (listOfItemsBought != null) {
+            for (int i = 0; i < listOfItemsBought.length(); i++) {
+                listData.add(listOfItemsBought.getString(i));
+            }
+        }
+        int transactionAmount = jsonObject.getInt("transactionAmount");
+        Purchase purchase = new Purchase(transactionID, customerName, dayOfPurchase, listData, transactionAmount);
         lop.addPurchase(purchase);
     }
 }
