@@ -66,10 +66,8 @@ public class JsonReader {
         int dayOfPurchase = jsonObject.getInt("dayOfPurchase");
         JSONArray listOfItemsBought = jsonObject.getJSONArray("itemsBought");
         ArrayList<String> listData = new ArrayList<String>();
-        if (listOfItemsBought != null) {
-            for (int i = 0; i < listOfItemsBought.length(); i++) {
-                listData.add(listOfItemsBought.getString(i));
-            }
+        for (int i = 0; i < listOfItemsBought.length(); i++) {
+            listData.add(listOfItemsBought.getString(i));
         }
         int transactionAmount = jsonObject.getInt("transactionAmount");
         Purchase purchase = new Purchase(transactionID, customerName, dayOfPurchase, listData, transactionAmount);

@@ -299,4 +299,17 @@ class ListOfPurchasesTest {
         float returnAvgTransReq = testListOfPurchases.calculateAverageTransactionsRequiredToReachRevGoal();
         assertEquals(1,returnAvgTransReq);
     }
+
+    @Test
+    void testRemovePurchaseNull() {
+        testListOfPurchases.addPurchase(testPurchase);
+        testListOfPurchases.addPurchase(testPurchase2);
+        testListOfPurchases.addPurchase(testPurchase3);
+        testListOfPurchases.removePurchase(999);
+
+        assertEquals(3,testListOfPurchases.listOfPurchases.size());
+        assertEquals(testPurchase,testListOfPurchases.listOfPurchases.get(0));
+        assertEquals(testPurchase2,testListOfPurchases.listOfPurchases.get(1));
+        assertEquals(testPurchase3,testListOfPurchases.listOfPurchases.get(2));
+    }
 }
