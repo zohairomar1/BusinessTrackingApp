@@ -39,7 +39,7 @@ public class JsonWriterTest extends JsonTest {
             assertEquals(200, lop.getRevenueGoal());
             assertEquals(0, lop.viewListOfPurchases().size());
         } catch (IOException e) {
-            fail("Exception should not have been thrown");
+            fail("Exception should not have been thrown.");
         }
     }
 
