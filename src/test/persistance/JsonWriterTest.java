@@ -54,19 +54,20 @@ public class JsonWriterTest extends JsonTest {
 
             ArrayList<String> loib2 = new ArrayList<>();
             loib2.add("shoes");
-            lop.addPurchase(new Purchase(55,"bro2",7,loib2,80));
+            lop.addPurchase(new Purchase(66,"bro2",7,loib2,80));
             JsonWriter writer = new JsonWriter("./data/testWriterGeneralListOfPurchases.json");
 
             writer.open();
             writer.write(lop);
             writer.close();
 
-            JsonReader reader = new JsonReader("./data/testWriterEmptyListOfPurchases.json");
+            JsonReader reader = new JsonReader("./data/testWriterGeneralListOfPurchases.json");
             lop = reader.read();
             assertEquals(200, lop.getRevenueGoal());
-//            List<Purchase> purchases = lop.getPurchases();
-//            assertEquals(2,purchases.size());
-//            checkPurchase(105,"bro",4, loib,50,purchases.get(0));
+            List<Purchase> purchases = lop.getPurchases();
+            assertEquals(2,purchases.size());
+            checkPurchase(105,"bro",4, loib,50,purchases.get(0));
+            checkPurchase(66,"bro2",7, loib2,80,purchases.get(1));
 
         } catch (IOException e) {
             fail("Exception should not have been thrown");

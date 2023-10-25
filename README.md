@@ -14,3 +14,5 @@
 * As a business, we want to be able to delete a selected customer purchase because it was refunded/declined.
 * As a business, we want to be able to filter and view the amount of money spent / amount of goods bought in a specific time period we choose.
 * As a business, we want to set a revenue goal and see data regarding progress.
+* As a business, we want to be able to load a previous list of purchases from file.
+* As a business, we want to be able to save the current list of purchases to file.

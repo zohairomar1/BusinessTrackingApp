@@ -2,7 +2,11 @@ package ui;
 
 import model.ListOfPurchases;
 import model.Purchase;
+import persistance.JsonReader;
+import persistance.JsonWriter;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -12,9 +16,13 @@ public class PurchaseApp {
     private Scanner obj;
     private ListOfPurchases listOfPurchases;
     private static final DecimalFormat decfor = new DecimalFormat("0.00");
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
+    private static final String JSON_STORE = "./data/listofpurchases.json";
+
 
     // EFFECTS: runs the Purchase application
-    public PurchaseApp() {
+    public PurchaseApp() throws FileNotFoundException {
         runPurchase();
     }
 
@@ -42,6 +50,7 @@ public class PurchaseApp {
 
     // MODIFIES: this
     // EFFECTS: processes user command
+    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
     private void processCommand(String command) {
         if (command.equals("a")) {
             doAddPurchase();
@@ -63,6 +72,10 @@ public class PurchaseApp {
             doFilterBasedOnAmount();
         } else if (command.equals("z")) {
             doViewAllPurchases();
+        } else if (command.equals("1")) {
+            saveListOfPurchases();
+        } else if (command.equals("2")) {
+            loadListOfPurchases();
         } else {
             System.out.println("Selection not valid...");
         }
@@ -72,16 +85,18 @@ public class PurchaseApp {
     // EFFECTS: initializes listOfAccounts
     private void init() {
         obj = new Scanner(System.in);
-//        System.out.print("Please enter a revenue goal: ");
-//        int revGoals = obj.nextInt();
         int returnValue = revGoalChecker();
         obj.useDelimiter("\n");
         listOfPurchases = new ListOfPurchases(returnValue);
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
     }
 
     // EFFECTS: displays menu of options to user
     private void displayMenu() {
         System.out.println("\nSelect from:");
+        System.out.println("\t1 -> save list of purchases to file");
+        System.out.println("\t2 -> load list of purchases from file");
         System.out.println("\tz -> view all purchases in the list");
         System.out.println("\ta -> add purchase");
         System.out.println("\tb -> view purchase");
@@ -280,5 +295,30 @@ public class PurchaseApp {
             return revGoal1;
         }
         return revGoal1;
+    }
+
+    // EFFECTS: saves list of purchases to file
+    private void saveListOfPurchases() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(listOfPurchases);
+            jsonWriter.close();
+            System.out.println("Saved list of purchases with revenue goal of "
+                    + listOfPurchases.getRevenueGoal() + " to " + JSON_STORE);
+        } catch (FileNotFoundException fnfe) {
+            System.out.println("Unable to write to file: " + JSON_STORE);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: loads list of purchases from file
+    private void loadListOfPurchases() {
+        try {
+            listOfPurchases = jsonReader.read();
+            System.out.println("Loaded list of purchases with revenue goal of "
+                    + listOfPurchases.getRevenueGoal() + " from " + JSON_STORE);
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + JSON_STORE);
+        }
     }
 }
