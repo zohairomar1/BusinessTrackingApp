@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,99 +19,170 @@ import java.util.Arrays;
 public class PurchaseGUI extends JFrame {
 
     private ListOfPurchases listOfPurchases;
-    private Purchase testPurchase;
-    private Purchase testPurchase2;
-    private Purchase testPurchase3;
-    private Purchase testPurchase4;
-    private Purchase testPurchase5;
-    private Purchase testPurchase6;
+//    private Purchase testPurchase;
+//    private Purchase testPurchase2;
+//    private Purchase testPurchase3;
+//    private Purchase testPurchase4;
+//    private Purchase testPurchase5;
+//    private Purchase testPurchase6;
 
     private JProgressBar progressBar;
     private JDialog loadingDialog;
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
+    private JWindow splashScreen;
+    int step = 1; // Current step
 
     public PurchaseGUI() {
         showLoadingScreen();
         initializeListOfPurchases();
+        showSplashScreen();
         showMainFrame();
-        testPurchase = new Purchase(1,"zohair",2,new ArrayList<>(), 10);
-        testPurchase2 = new Purchase(2,"gregor",3,new ArrayList<>(), 20);
-        testPurchase3 = new Purchase(33,"paul",5,new ArrayList<>(), 30);
-        testPurchase4 = new Purchase(44,"drake",7,new ArrayList<>(), 40);
-        testPurchase5 = new Purchase(55,"yeat",9,new ArrayList<>(), 20);
-        testPurchase6 = new Purchase(66,"travis",10,new ArrayList<>(), 17);
-        listOfPurchases.addPurchase(testPurchase);
-        listOfPurchases.addPurchase(testPurchase2);
-        listOfPurchases.addPurchase(testPurchase3);
-        listOfPurchases.addPurchase(testPurchase4);
-        listOfPurchases.addPurchase(testPurchase5);
-        listOfPurchases.addPurchase(testPurchase6);
+
+//        testPurchase = new Purchase(1,"zohair",2,new ArrayList<>(), 10);
+//        testPurchase2 = new Purchase(2,"gregor",3,new ArrayList<>(), 20);
+//        testPurchase3 = new Purchase(33,"paul",5,new ArrayList<>(), 30);
+//        testPurchase4 = new Purchase(44,"drake",7,new ArrayList<>(), 40);
+//        testPurchase5 = new Purchase(55,"yeat",9,new ArrayList<>(), 20);
+//        testPurchase6 = new Purchase(66,"travis",10,new ArrayList<>(), 17);
+//        listOfPurchases.addPurchase(testPurchase);
+//        listOfPurchases.addPurchase(testPurchase2);
+//        listOfPurchases.addPurchase(testPurchase3);
+//        listOfPurchases.addPurchase(testPurchase4);
+//        listOfPurchases.addPurchase(testPurchase5);
+//        listOfPurchases.addPurchase(testPurchase6);
     }
 
-    // Initialize ListOfPurchases with the user-provided revenue goal
+    // loads up the mainframe of the GUI program
     private void showMainFrame() {
-        // Set up the main frame
-        setTitle("Purchase Manager");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new BorderLayout());
+        setUpMainFrame();
 
-        // Create buttons for adding, removing, displaying all purchases, and finding a purchase
         JButton addPurchaseButton = new JButton("Add Purchase");
         JButton removePurchaseButton = new JButton("Remove Purchase");
         JButton displayAllPurchasesButton = new JButton("Display All Purchases");
         JButton findPurchaseButton = new JButton("Find Purchase");
         JButton saveButton = new JButton("Save");
         JButton loadButton = new JButton("Load");
+        JButton calcRevenueButton = new JButton("Calculate revenue");
+        JButton calcAvgTransButton = new JButton("Calculate average transaction amount");
+        JButton calcAvgTransToRevGoalButton =
+                new JButton("Calculate average transactions required to reach revenue goal");
+        JButton filterOnAmountButton = new JButton("Filter based on amount");
+        JButton filterOnDayButton = new JButton("Filter based on day");
 
+        buttonFunction(addPurchaseButton, removePurchaseButton,
+                displayAllPurchasesButton, findPurchaseButton, saveButton, loadButton,
+                calcRevenueButton, calcAvgTransButton, calcAvgTransToRevGoalButton,
+                filterOnDayButton, filterOnAmountButton);
+        JLabel revenueGoalLabel = new JLabel("Revenue Goal: $" + listOfPurchases.getRevenueGoal());
+        setUpButtonPanel(saveButton, loadButton, addPurchaseButton,
+                removePurchaseButton, displayAllPurchasesButton, calcRevenueButton,
+                calcAvgTransButton, calcAvgTransToRevGoalButton, filterOnDayButton,
+                filterOnAmountButton);
+        add(revenueGoalLabel, BorderLayout.SOUTH);
+        pack();
+        setLocationRelativeTo(null); // centering
+        setVisible(true);
+    }
 
-        // Add action listeners for the buttons
+    private void buttonFunction(JButton addPurchaseButton, JButton removePurchaseButton,
+                                JButton displayAllPurchasesButton, JButton findPurchaseButton,
+                                JButton saveButton, JButton loadButton, JButton calcRevenueButton, JButton calcAvgTransButton,
+                                JButton calcAvgTransToRevGoalButton, JButton filterOnDayButton, JButton filterOnAmountButton) {
+        buttonFunction1(addPurchaseButton, removePurchaseButton, displayAllPurchasesButton, findPurchaseButton, saveButton, loadButton, calcRevenueButton);
+        calcAvgTransButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                calcAvgTrans();
+            }
+        });
+        calcAvgTransToRevGoalButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                calcAvgTransToRevGoal();
+            }
+        });
+        filterButtons(filterOnDayButton, filterOnAmountButton);
+    }
+
+    private void filterButtons(JButton filterOnDayButton, JButton filterOnAmountButton) {
+        filterOnDayButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                filterOnDay();
+            }
+        });
+        filterOnAmountButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                filterOnAmount();
+            }
+        });
+    }
+
+    private void buttonFunction1(JButton addPurchaseButton, JButton removePurchaseButton,
+                                 JButton displayAllPurchasesButton, JButton findPurchaseButton,
+                                 JButton saveButton, JButton loadButton, JButton calcRevenueButton) {
         addPurchaseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                addPurchase();  // Implement this method to handle adding a purchase
+                addPurchase();
             }
         });
-
         removePurchaseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                removePurchase();  // Implement this method to handle removing a purchase
+                removePurchase();
             }
         });
-
         displayAllPurchasesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                displayAllPurchases();  // Implement this method to handle displaying all purchases
+                displayAllPurchases();
             }
         });
+        findButtonAlone(findPurchaseButton);
+        buttonFunction2(saveButton, loadButton, calcRevenueButton);
+    }
 
+    private void findButtonAlone(JButton findPurchaseButton) {
         findPurchaseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                findPurchase();  // Implement this method to handle finding a specific purchase
+                findPurchase();
             }
         });
+    }
 
+    private void buttonFunction2(JButton saveButton, JButton loadButton, JButton calcRevenueButton) {
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                saveProgram();  // Implement this method to handle saving the program
+                saveProgram();
             }
         });
-
         loadButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                loadProgram();  // Implement this method to handle loading the program
+                loadProgram();
             }
         });
+        calcRevenueButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                calculateRevenue();
+            }
+        });
+    }
 
-        // Create a label for displaying the revenue goal
-        JLabel revenueGoalLabel = new JLabel("Revenue Goal: $" + listOfPurchases.getRevenueGoal());
 
-        // Create a panel for buttons with vertical alignment
+    // Create a panel for buttons with vertical alignment
+    private void setUpButtonPanel(JButton saveButton, JButton loadButton,
+                                  JButton addPurchaseButton, JButton removePurchaseButton,
+                                  JButton displayAllPurchasesButton, JButton calcRevenueButton,
+                                  JButton calcAvgTransButton, JButton calcAvgTransToRevGoalButton,
+                                  JButton filterOnDayButton, JButton filterOnAmountButton) {
+
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
         buttonPanel.add(saveButton);
@@ -118,19 +190,82 @@ public class PurchaseGUI extends JFrame {
         buttonPanel.add(addPurchaseButton);
         buttonPanel.add(removePurchaseButton);
         buttonPanel.add(displayAllPurchasesButton);
-        buttonPanel.add(findPurchaseButton);
+        buttonPanel.add(calcRevenueButton);
+        buttonPanel.add(calcAvgTransButton);
+        buttonPanel.add(calcAvgTransToRevGoalButton);
+        buttonPanel.add(filterOnDayButton);
+        buttonPanel.add(filterOnAmountButton);
 
-        // Add components to the main frame
         add(buttonPanel, BorderLayout.CENTER);
-        add(revenueGoalLabel, BorderLayout.SOUTH);
-
-        pack();
-        setLocationRelativeTo(null); // Center the main frame on the screen
-        setVisible(true);
     }
 
+    private void setUpMainFrame() {
+        setTitle("Purchase Manager");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new BorderLayout());
+    }
+
+    private void filterOnDay() {
+        int startDay = Integer.parseInt(JOptionPane.showInputDialog("Enter start day:"));
+        int endDay = Integer.parseInt(JOptionPane.showInputDialog("Enter end day:"));
+        ArrayList<Purchase> filteredPurchases = listOfPurchases.filterPurchasesBasedOnDay(startDay, endDay);
+        StringBuilder message = new StringBuilder("Filtered Purchases Based on Day:\n");
+
+        for (Purchase purchase : filteredPurchases) {
+            message.append(purchase.toString()).append("\n");
+        }
+        JOptionPane.showMessageDialog(this,
+                message,
+                "Filtered Purchases Based on Day",
+                JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void filterOnAmount() {
+        int startDay = Integer.parseInt(JOptionPane.showInputDialog("Enter a starting amount: "));
+        int endDay = Integer.parseInt(JOptionPane.showInputDialog("Enter an ending amount: "));
+        ArrayList<Purchase> filteredPurchases = listOfPurchases.filterPurchasesBasedOnDay(startDay, endDay);
+        StringBuilder message = new StringBuilder("Filtered Purchases Based on Amount:\n");
+
+        for (Purchase purchase : filteredPurchases) {
+            message.append(purchase.toString()).append("\n");
+        }
+
+        JOptionPane.showMessageDialog(this, message,
+                "Filtered Purchases based on Amount",
+                JOptionPane.INFORMATION_MESSAGE);
+    }
+
+
+    private void calcAvgTransToRevGoal() {
+        float averageTransactionsToReachGoal = listOfPurchases.calculateAverageTransactionsRequiredToReachRevGoal();
+
+        JOptionPane.showMessageDialog(this,
+                "Average Transactions to Reach Revenue Goal: " + averageTransactionsToReachGoal,
+                "Average Transactions to Reach Revenue Goal",
+                JOptionPane.INFORMATION_MESSAGE);
+    }
+
+
+    private void calculateRevenue() {
+        int totalRevenue = listOfPurchases.calculateRevenue();
+
+        JOptionPane.showMessageDialog(this,
+                "Total Revenue: $" + totalRevenue,
+                "Revenue Calculation",
+                JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void calcAvgTrans() {
+        float averageTransactionAmount = listOfPurchases.calculateAverageTransactionSpend();
+
+        JOptionPane.showMessageDialog(this,
+                "Average Transaction Amount: $" + averageTransactionAmount,
+                "Average Transaction Amount",
+                JOptionPane.INFORMATION_MESSAGE);
+    }
+
+
     private void findPurchase() {
-        // Implement logic to find a specific purchase based on transactionID
         String input = JOptionPane.showInputDialog(this, "Enter Transaction ID to find:");
         if (input != null && !input.isEmpty()) {
             try {
@@ -148,6 +283,65 @@ public class PurchaseGUI extends JFrame {
                         "Invalid Input", JOptionPane.ERROR_MESSAGE);
             }
         }
+    }
+
+    private void showSplashScreen() {
+        splashScreen = new JWindow();
+        JLabel splashLabel = new JLabel();
+
+        // loading image
+        ImageIcon imageIcon = new ImageIcon("resources/img.png");
+        int imageWidth = imageIcon.getIconWidth();
+        int imageHeight = imageIcon.getIconHeight();
+
+        // icon with initial empty state
+        BufferedImage emptyImage = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_ARGB);
+        splashLabel.setIcon(new ImageIcon(emptyImage));
+
+        splashScreen.getContentPane().add(splashLabel, BorderLayout.CENTER);
+        splashScreen.setSize(512, 512);
+        splashScreen.setLocationRelativeTo(null);
+        splashScreen.setVisible(true);
+        
+        int timerDelay = 15;
+        int steps = imageWidth;
+        splashTimer(timerDelay, imageWidth, steps, imageHeight, imageIcon, splashLabel);
+    }
+
+    private void splashTimer(int timerDelay, int imageWidth, int steps, int imageHeight,
+                        ImageIcon imageIcon, JLabel splashLabel) {
+        Timer timer = new Timer(timerDelay, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Calculate the width of the portion to reveal
+                int visibleWidth = (step * imageWidth) / steps;
+
+                // Create an image with the visible portion
+                BufferedImage visibleImage = new BufferedImage(visibleWidth, imageHeight, BufferedImage.TYPE_INT_ARGB);
+                Graphics g = visibleImage.getGraphics();
+                g.drawImage(imageIcon.getImage(), 0, 0, visibleWidth, imageHeight, null);
+
+                // Update the label with the visible image
+                splashLabel.setIcon(new ImageIcon(visibleImage));
+
+                // Increment the step
+                step++;
+
+                // Stop the timer when the image is fully revealed
+                if (step >= steps) {
+                    ((Timer) e.getSource()).stop();
+                }
+            }
+        });
+
+        // Start the timer
+        timer.setInitialDelay(0);
+        timer.start();
+    }
+
+
+    private void closeSplashScreen() {
+        splashScreen.dispose();
     }
 
     // Display all purchases in a pop-up
@@ -192,29 +386,22 @@ public class PurchaseGUI extends JFrame {
         String transactionAmountInput = JOptionPane.showInputDialog("Enter Transaction Amount:");
 
         try {
-            // Parse inputs to the appropriate types
+            // parsing inputs
             int transactionId = Integer.parseInt(transactionIdInput);
             int dayOfPurchase = Integer.parseInt(dayOfPurchaseInput);
             int transactionAmount = Integer.parseInt(transactionAmountInput);
 
-            // Validate if the transaction ID is unique
+            // transactionID validation
             if (!(listOfPurchases.viewSpecificPurchase(transactionId) == null)) {
                 JOptionPane.showMessageDialog(this, "Transaction ID must be unique. Please enter a unique integer.");
                 return;
             }
-
-            // Parse itemsBought as ArrayList<String>
             ArrayList<String> itemsBought = new ArrayList<>(Arrays.asList(itemsBoughtInput.split(",")));
-
-            // Create a new Purchase object and add it to the list
             Purchase newPurchase = new Purchase(transactionId, customerName,
                     dayOfPurchase,itemsBought, transactionAmount);
             listOfPurchases.addPurchase(newPurchase);
-
-            // Display success message
             JOptionPane.showMessageDialog(this, "Purchase added successfully.");
         } catch (NumberFormatException e) {
-            // Handle invalid input types
             JOptionPane.showMessageDialog(this, "Invalid input. Please enter valid data types for Transaction ID, Day of Purchase, and Transaction Amount.");
         }
     }
@@ -227,7 +414,6 @@ public class PurchaseGUI extends JFrame {
             jsonWriter.close();
             JOptionPane.showMessageDialog(this, "Program saved successfully!");
         } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error: Unable to save program.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -238,7 +424,6 @@ public class PurchaseGUI extends JFrame {
             listOfPurchases = jsonReader.read();
             JOptionPane.showMessageDialog(this, "Program loaded successfully!");
         } catch (IOException ex) {
-            ex.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error: Unable to load program.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -284,7 +469,7 @@ public class PurchaseGUI extends JFrame {
     // Enhanced loading screen with a progress bar
     private void showLoadingScreen() {
         // Create a progress bar
-        int duration = 40;
+        int duration = 2000;
         progressBar = new JProgressBar(0, 100);
         progressBar.setStringPainted(true);
 
@@ -297,8 +482,12 @@ public class PurchaseGUI extends JFrame {
         loadingDialog.setLocationRelativeTo(this);
         loadingDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 
-        // Animate the progress bar over the specified duration
-        int timerDelay = duration / 100; // Update every 1% of the duration
+
+        loadingTimer(duration);
+    }
+
+    private void loadingTimer(int duration) {
+        int timerDelay = duration / 100; // update 1% of the duration
         int steps = 100;
         int increment = progressBar.getMaximum() / steps;
 
