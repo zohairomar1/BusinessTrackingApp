@@ -1,0 +1,47 @@
+{
+    "revGoal": 200,
+    "listOfPurchases": [
+        {
+            "transactionAmount": 10,
+            "itemsBought": [],
+            "dayOfPurchase": 2,
+            "transactionID": 1,
+            "customerName": "zohair"
+        },
+        {
+            "transactionAmount": 20,
+            "itemsBought": [],
+            "dayOfPurchase": 3,
+            "transactionID": 2,
+            "customerName": "gregor"
+        },
+        {
+            "transactionAmount": 30,
+            "itemsBought": [],
+            "dayOfPurchase": 5,
+            "transactionID": 33,
+            "customerName": "paul"
+        },
+        {
+            "transactionAmount": 40,
+            "itemsBought": [],
+            "dayOfPurchase": 7,
+            "transactionID": 44,
+            "customerName": "drake"
+        },
+        {
+            "transactionAmount": 20,
+            "itemsBought": [],
+            "dayOfPurchase": 9,
+            "transactionID": 55,
+            "customerName": "yeat"
+        },
+        {
+            "transactionAmount": 17,
+            "itemsBought": [],
+            "dayOfPurchase": 10,
+            "transactionID": 66,
+            "customerName": "travis"
+        }
+    ]
+}
