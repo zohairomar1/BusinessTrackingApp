@@ -79,6 +79,10 @@ public class PurchaseGUI extends JFrame {
                 removePurchaseButton, displayAllPurchasesButton, calcRevenueButton,
                 calcAvgTransButton, calcAvgTransToRevGoalButton, filterOnDayButton,
                 filterOnAmountButton);
+        revenueLabel(revenueGoalLabel);
+    }
+
+    private void revenueLabel(JLabel revenueGoalLabel) {
         add(revenueGoalLabel, BorderLayout.SOUTH);
         pack();
         setLocationRelativeTo(null); // centering
@@ -87,9 +91,12 @@ public class PurchaseGUI extends JFrame {
 
     private void buttonFunction(JButton addPurchaseButton, JButton removePurchaseButton,
                                 JButton displayAllPurchasesButton, JButton findPurchaseButton,
-                                JButton saveButton, JButton loadButton, JButton calcRevenueButton, JButton calcAvgTransButton,
-                                JButton calcAvgTransToRevGoalButton, JButton filterOnDayButton, JButton filterOnAmountButton) {
-        buttonFunction1(addPurchaseButton, removePurchaseButton, displayAllPurchasesButton, findPurchaseButton, saveButton, loadButton, calcRevenueButton);
+                                JButton saveButton, JButton loadButton,
+                                JButton calcRevenueButton, JButton calcAvgTransButton,
+                                JButton calcAvgTransToRevGoalButton, JButton filterOnDayButton,
+                                JButton filterOnAmountButton) {
+        buttonFunction1(addPurchaseButton, removePurchaseButton,
+                displayAllPurchasesButton, findPurchaseButton, saveButton, loadButton, calcRevenueButton);
         calcAvgTransButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -402,7 +409,9 @@ public class PurchaseGUI extends JFrame {
             listOfPurchases.addPurchase(newPurchase);
             JOptionPane.showMessageDialog(this, "Purchase added successfully.");
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Invalid input. Please enter valid data types for Transaction ID, Day of Purchase, and Transaction Amount.");
+            JOptionPane.showMessageDialog(this,
+                    "Invalid input. Please enter valid data types for Transaction ID, "
+                            + "Day of Purchase, and Transaction Amount.");
         }
     }
 
@@ -432,12 +441,8 @@ public class PurchaseGUI extends JFrame {
     // Method to handle removing a purchase
     private void removePurchase() {
         boolean removed;
-        // Prompt the user to enter the transaction ID to be removed
         String transactionIdInput = JOptionPane.showInputDialog("Enter Transaction ID to Remove:");
-
-        // Validate user input
         if (transactionIdInput == null || transactionIdInput.trim().isEmpty()) {
-            // User canceled or entered an empty string
             return;
         }
 
@@ -446,7 +451,8 @@ public class PurchaseGUI extends JFrame {
         try {
             transactionIdToRemove = Integer.parseInt(transactionIdInput);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Invalid input. Please enter a valid integer for Transaction ID.");
+            JOptionPane.showMessageDialog(this,
+                    "Invalid input. Please enter a valid integer for Transaction ID.");
             return;
         }
 
@@ -459,10 +465,16 @@ public class PurchaseGUI extends JFrame {
         }
 
         // Display the result to the user
+        removeOutput(removed, transactionIdToRemove);
+    }
+
+    private void removeOutput(boolean removed, int transactionIdToRemove) {
         if (removed) {
-            JOptionPane.showMessageDialog(this, "Purchase with Transaction ID " + transactionIdToRemove + " removed successfully.");
+            JOptionPane.showMessageDialog(this,
+                    "Purchase with Transaction ID " + transactionIdToRemove + " removed successfully.");
         } else {
-            JOptionPane.showMessageDialog(this, "No purchase found with Transaction ID " + transactionIdToRemove + ".");
+            JOptionPane.showMessageDialog(this,
+                    "No purchase found with Transaction ID " + transactionIdToRemove + ".");
         }
     }
 

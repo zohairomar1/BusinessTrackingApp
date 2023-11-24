@@ -16,3 +16,10 @@
 * As a business, we want to set a revenue goal and see data regarding progress.
 * As a business, we want to be able to load a previous list of purchases from file.
 * As a business, we want to be able to save the current list of purchases to file.
+* # Instructions for Grader
+
+- You can generate the first required action related to the user story "adding multiple purchases to a list of purchases" by adding a purchase.
+- You can generate the second required action related to the user story "adding multiple purchases to a list of purchases" by removing a purchase.
+- You can locate my visual component by starting up the program.
+- You can save the state of my application by using the save button.
+- You can reload the state of my application by using the load button.
