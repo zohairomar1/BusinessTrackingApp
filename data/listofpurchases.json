@@ -1,25 +1,4 @@
 {
-    "revGoal": 100,
-    "listOfPurchases": [
-        {
-            "transactionAmount": 50,
-            "itemsBought": [
-                "ab",
-                "cd"
-            ],
-            "dayOfPurchase": 4,
-            "transactionID": 5,
-            "customerName": "zo"
-        },
-        {
-            "transactionAmount": 999,
-            "itemsBought": [
-                "pa",
-                "pa"
-            ],
-            "dayOfPurchase": 99,
-            "transactionID": 99,
-            "customerName": "zozo"
-        }
-    ]
+    "revGoal": 200,
+    "listOfPurchases": []
 }

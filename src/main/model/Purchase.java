@@ -58,4 +58,12 @@ public class Purchase implements Writable {
         json.put("transactionAmount", transactionAmount);
         return json;
     }
+
+    @Override
+    public String toString() {
+        return ("Transaction ID: " + transactionID + ", Customer Name: " + customerName
+                +
+                ", Day of Purchase: " + dayOfPurchase + ", Items Bought: " + itemsBought
+                + ", Transaction Amount: $" + transactionAmount);
+    }
 }

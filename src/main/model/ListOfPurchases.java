@@ -39,7 +39,6 @@ public class ListOfPurchases implements Writable {
         return acc;
     }
 
-    // REQUIRES: listOfPurchases has to contain the transaction ID
     // MODIFIES: this
     // EFFECTS: returns the specific purchase based on transactionID inputted
     public Purchase viewSpecificPurchase(int transactionID) {

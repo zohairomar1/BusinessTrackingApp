@@ -50,7 +50,7 @@ public class PurchaseApp {
 
     // MODIFIES: this
     // EFFECTS: processes user command
-    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
+
     private void processCommand(String command) {
         if (command.equals("a")) {
             doAddPurchase();
@@ -72,7 +72,13 @@ public class PurchaseApp {
             doFilterBasedOnAmount();
         } else if (command.equals("z")) {
             doViewAllPurchases();
-        } else if (command.equals("1")) {
+        } else {
+            checkRest(command);
+        }
+    }
+
+    public void checkRest(String command) {
+        if (command.equals("1")) {
             saveListOfPurchases();
         } else if (command.equals("2")) {
             loadListOfPurchases();
