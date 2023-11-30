@@ -20,6 +20,8 @@ public class ListOfPurchases implements Writable {
 
         listOfPurchases = new ArrayList<>();
         this.revGoal = revGoal;
+        EventLog.getInstance().logEvent(new Event("A list of purchases was initialized with a revenue goal"
+                + " of " + revGoal));
     }
 
     // MODIFIES: this
@@ -126,7 +128,7 @@ public class ListOfPurchases implements Writable {
     public float calculateRevenueProgress() {
         int spending = this.calculateRevenue();
 
-        EventLog.getInstance().logEvent(new Event("The revenue progress was calculated as $"
+        EventLog.getInstance().logEvent(new Event("The revenue progress was calculated as: $"
                 + (((float) spending / revGoal) * 100)));
         return (((float) spending / revGoal) * 100);
     }
