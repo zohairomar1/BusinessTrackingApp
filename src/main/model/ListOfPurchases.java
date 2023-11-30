@@ -26,6 +26,7 @@ public class ListOfPurchases implements Writable {
     // EFFECTS: adds a purchase to the list of purchases
     public void addPurchase(Purchase p) {
         listOfPurchases.add(p);
+        EventLog.getInstance().logEvent(new Event("The following purchase was added: \n" + p.toString()));
     }
 
     // REQUIRES: (listOfPurchases.size() > 0)
@@ -36,6 +37,8 @@ public class ListOfPurchases implements Writable {
         for (Purchase p : listOfPurchases) {
             acc.add(p);
         }
+        EventLog.getInstance().logEvent(new Event("All purchases from from the list were outputted."
+                + listOfPurchases.toString()));
         return acc;
     }
 
@@ -44,6 +47,8 @@ public class ListOfPurchases implements Writable {
     public Purchase viewSpecificPurchase(int transactionID) {
         for (Purchase p : listOfPurchases) {
             if (p.getTransactionID() == transactionID) {
+                EventLog.getInstance().logEvent(new Event("The specific purchase correlated "
+                        + "with transaction ID " + transactionID + " was outputted " + p.toString()));
                 return p;
             }
         }
@@ -56,6 +61,8 @@ public class ListOfPurchases implements Writable {
     public void removePurchase(int transactionID) {
         Purchase getter = this.viewSpecificPurchase(transactionID);
         if (getter != null) {
+            EventLog.getInstance().logEvent(new Event("The following purchase was removed from the list: \n"
+                    + getter.toString()));
             listOfPurchases.remove(getter);
         }
     }
@@ -70,6 +77,15 @@ public class ListOfPurchases implements Writable {
                 acc2.add(p);
             }
         }
+
+        String eventAcc2 = "";
+
+        for (Purchase pp: acc2) {
+            eventAcc2 += pp.toString();
+            eventAcc2 += "\n";
+        }
+        EventLog.getInstance().logEvent(new Event("The following purchases were filtered between "
+                + "starting day " + start + " and ending day " + end + ": \n"  + eventAcc2));
         return acc2;
     }
 
@@ -83,6 +99,16 @@ public class ListOfPurchases implements Writable {
                 acc3.add(p);
             }
         }
+
+        String eventAcc = "";
+
+        for (Purchase pp: acc3) {
+            eventAcc += pp.toString();
+            eventAcc += "\n";
+        }
+
+        EventLog.getInstance().logEvent(new Event("The following purchases were filtered between "
+                + "starting amount " + amount1 + " and ending amount " + amount2 + ": \n"  + eventAcc));
         return acc3;
     }
 
@@ -92,12 +118,16 @@ public class ListOfPurchases implements Writable {
 
     public void setRevGoal(int revGoal) {
         this.revGoal = revGoal;
+        EventLog.getInstance().logEvent(new Event("The revenue goal was set to $" + revGoal));
     }
 
     // REQUIRES: revenue < revenueGoal
     // EFFECTS: returns the revenue progress
     public float calculateRevenueProgress() {
         int spending = this.calculateRevenue();
+
+        EventLog.getInstance().logEvent(new Event("The revenue progress was calculated as $"
+                + (((float) spending / revGoal) * 100)));
         return (((float) spending / revGoal) * 100);
     }
 
@@ -107,6 +137,9 @@ public class ListOfPurchases implements Writable {
 
         int remainingRevenue = revGoal - this.calculateRevenue();
         float avgTransaction = this.calculateAverageTransactionSpend();
+        EventLog.getInstance().logEvent(new Event("The amount of transactions on average required "
+                + "to reach revenue goal was calculated as: $"
+                + (remainingRevenue / avgTransaction)));
         return (remainingRevenue / avgTransaction);
     }
 
@@ -116,12 +149,16 @@ public class ListOfPurchases implements Writable {
         for (Purchase p : listOfPurchases) {
             acc4 = acc4 + p.getTransactionAmount();
         }
+        EventLog.getInstance().logEvent(new Event("The revenue was calculated as: $"
+                + acc4));
         return acc4;
     }
 
     // EFFECTS: calculate the average amount spent per transaction in list
     public float calculateAverageTransactionSpend() {
         int totalSpending = this.calculateRevenue();
+        EventLog.getInstance().logEvent(new Event("The average transaction spending was calculated as: $"
+                + (float) totalSpending / (listOfPurchases.size())));
         return (float) totalSpending / (listOfPurchases.size());
     }
 
@@ -142,6 +179,18 @@ public class ListOfPurchases implements Writable {
         }
 
         return jsonArray;
+    }
+
+    // EFFECTS: returns list of purchases as string
+    @Override
+    public String toString() {
+        String stringAcc = "";
+
+        for (Purchase p : listOfPurchases) {
+            stringAcc += (p.toString());
+        }
+
+        return stringAcc;
     }
 
     public List<Purchase> getPurchases() {

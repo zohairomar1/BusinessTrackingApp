@@ -1,5 +1,7 @@
 package ui;
 
+import model.Event;
+import model.EventLog;
 import model.ListOfPurchases;
 import model.Purchase;
 import persistance.JsonReader;
@@ -9,51 +11,55 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-
+// Class representing the Purchase GUI interface
 public class PurchaseGUI extends JFrame {
 
     private ListOfPurchases listOfPurchases;
-//    private Purchase testPurchase;
-//    private Purchase testPurchase2;
-//    private Purchase testPurchase3;
-//    private Purchase testPurchase4;
-//    private Purchase testPurchase5;
-//    private Purchase testPurchase6;
+    private Purchase testPurchase;
+    private Purchase testPurchase2;
+    private Purchase testPurchase3;
+    private Purchase testPurchase4;
+    private Purchase testPurchase5;
+    private Purchase testPurchase6;
 
     private JProgressBar progressBar;
     private JDialog loadingDialog;
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
     private JWindow splashScreen;
-    int step = 1; // Current step
+    int step = 1;
 
+    // Sets up loading screen, initializing list of purchases shows the loading and main screen
     public PurchaseGUI() {
         showLoadingScreen();
         initializeListOfPurchases();
         showSplashScreen();
         showMainFrame();
 
-//        testPurchase = new Purchase(1,"zohair",2,new ArrayList<>(), 10);
-//        testPurchase2 = new Purchase(2,"gregor",3,new ArrayList<>(), 20);
-//        testPurchase3 = new Purchase(33,"paul",5,new ArrayList<>(), 30);
-//        testPurchase4 = new Purchase(44,"drake",7,new ArrayList<>(), 40);
-//        testPurchase5 = new Purchase(55,"yeat",9,new ArrayList<>(), 20);
-//        testPurchase6 = new Purchase(66,"travis",10,new ArrayList<>(), 17);
-//        listOfPurchases.addPurchase(testPurchase);
-//        listOfPurchases.addPurchase(testPurchase2);
-//        listOfPurchases.addPurchase(testPurchase3);
-//        listOfPurchases.addPurchase(testPurchase4);
-//        listOfPurchases.addPurchase(testPurchase5);
-//        listOfPurchases.addPurchase(testPurchase6);
+        testPurchase = new Purchase(1,"zohair",2,new ArrayList<>(), 10);
+        testPurchase2 = new Purchase(2,"gregor",3,new ArrayList<>(), 20);
+        testPurchase3 = new Purchase(33,"paul",5,new ArrayList<>(), 30);
+        testPurchase4 = new Purchase(44,"drake",7,new ArrayList<>(), 40);
+        testPurchase5 = new Purchase(55,"yeat",9,new ArrayList<>(), 20);
+        testPurchase6 = new Purchase(66,"travis",10,new ArrayList<>(), 17);
+        listOfPurchases.addPurchase(testPurchase);
+        listOfPurchases.addPurchase(testPurchase2);
+        listOfPurchases.addPurchase(testPurchase3);
+        listOfPurchases.addPurchase(testPurchase4);
+        listOfPurchases.addPurchase(testPurchase5);
+        listOfPurchases.addPurchase(testPurchase6);
     }
 
-    // loads up the mainframe of the GUI program
+
+    // EFFECTS: loads up the mainframe of the GUI program
     private void showMainFrame() {
         setUpMainFrame();
 
@@ -82,6 +88,7 @@ public class PurchaseGUI extends JFrame {
         revenueLabel(revenueGoalLabel);
     }
 
+    // EFFECTS: shows the revenue goal at the bottom of GUI program
     private void revenueLabel(JLabel revenueGoalLabel) {
         add(revenueGoalLabel, BorderLayout.SOUTH);
         pack();
@@ -89,6 +96,7 @@ public class PurchaseGUI extends JFrame {
         setVisible(true);
     }
 
+    // EFFECTS: sets up buttons
     private void buttonFunction(JButton addPurchaseButton, JButton removePurchaseButton,
                                 JButton displayAllPurchasesButton, JButton findPurchaseButton,
                                 JButton saveButton, JButton loadButton,
@@ -97,21 +105,25 @@ public class PurchaseGUI extends JFrame {
                                 JButton filterOnAmountButton) {
         buttonFunction1(addPurchaseButton, removePurchaseButton,
                 displayAllPurchasesButton, findPurchaseButton, saveButton, loadButton, calcRevenueButton);
+
         calcAvgTransButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 calcAvgTrans();
             }
         });
+
         calcAvgTransToRevGoalButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 calcAvgTransToRevGoal();
             }
+
         });
         filterButtons(filterOnDayButton, filterOnAmountButton);
     }
 
+    // EFFECTS: help set up buttons
     private void filterButtons(JButton filterOnDayButton, JButton filterOnAmountButton) {
         filterOnDayButton.addActionListener(new ActionListener() {
             @Override
@@ -127,6 +139,7 @@ public class PurchaseGUI extends JFrame {
         });
     }
 
+    // EFFECTS: help set up other buttons
     private void buttonFunction1(JButton addPurchaseButton, JButton removePurchaseButton,
                                  JButton displayAllPurchasesButton, JButton findPurchaseButton,
                                  JButton saveButton, JButton loadButton, JButton calcRevenueButton) {
@@ -152,6 +165,7 @@ public class PurchaseGUI extends JFrame {
         buttonFunction2(saveButton, loadButton, calcRevenueButton);
     }
 
+    // EFFECTS: sets up the finding purchase button
     private void findButtonAlone(JButton findPurchaseButton) {
         findPurchaseButton.addActionListener(new ActionListener() {
             @Override
@@ -161,6 +175,7 @@ public class PurchaseGUI extends JFrame {
         });
     }
 
+    // EFFECTS: sets up save and load, calculate revenue buttons
     private void buttonFunction2(JButton saveButton, JButton loadButton, JButton calcRevenueButton) {
         saveButton.addActionListener(new ActionListener() {
             @Override
@@ -183,7 +198,7 @@ public class PurchaseGUI extends JFrame {
     }
 
 
-    // Create a panel for buttons with vertical alignment
+    // EFFECTS: creates a panel for buttons with vertical alignment
     private void setUpButtonPanel(JButton saveButton, JButton loadButton,
                                   JButton addPurchaseButton, JButton removePurchaseButton,
                                   JButton displayAllPurchasesButton, JButton calcRevenueButton,
@@ -206,12 +221,32 @@ public class PurchaseGUI extends JFrame {
         add(buttonPanel, BorderLayout.CENTER);
     }
 
+    // EFFECTS: sets up the mainframe
     private void setUpMainFrame() {
         setTitle("Purchase Manager");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                exitProgram();
+            }
+        });
         setLayout(new BorderLayout());
     }
 
+    private void exitProgram() {
+        printLog(EventLog.getInstance());
+        System.exit(0);
+    }
+
+    public static void printLog(EventLog el) {
+        for (Event e : el) {
+            System.out.println(e.toString());
+            System.out.println("\n");
+        }
+    }
+
+    // EFFECTS: shows the purchases filtered based on parameter days given on user input
     private void filterOnDay() {
         int startDay = Integer.parseInt(JOptionPane.showInputDialog("Enter start day:"));
         int endDay = Integer.parseInt(JOptionPane.showInputDialog("Enter end day:"));
@@ -227,6 +262,7 @@ public class PurchaseGUI extends JFrame {
                 JOptionPane.INFORMATION_MESSAGE);
     }
 
+    // EFFECTS: shows the purchases filtered based on parameter amounts given on user input
     private void filterOnAmount() {
         int startDay = Integer.parseInt(JOptionPane.showInputDialog("Enter a starting amount: "));
         int endDay = Integer.parseInt(JOptionPane.showInputDialog("Enter an ending amount: "));
@@ -242,7 +278,7 @@ public class PurchaseGUI extends JFrame {
                 JOptionPane.INFORMATION_MESSAGE);
     }
 
-
+    // EFFECTS: shows the calculated average transactions required to reach the revenue goal
     private void calcAvgTransToRevGoal() {
         float averageTransactionsToReachGoal = listOfPurchases.calculateAverageTransactionsRequiredToReachRevGoal();
 
@@ -252,7 +288,7 @@ public class PurchaseGUI extends JFrame {
                 JOptionPane.INFORMATION_MESSAGE);
     }
 
-
+    // EFFECTS: shows the calculated revenue of the list of purchases
     private void calculateRevenue() {
         int totalRevenue = listOfPurchases.calculateRevenue();
 
@@ -262,6 +298,7 @@ public class PurchaseGUI extends JFrame {
                 JOptionPane.INFORMATION_MESSAGE);
     }
 
+    // EFFECTS: shows the calculated average transaction amount of the list of purchases
     private void calcAvgTrans() {
         float averageTransactionAmount = listOfPurchases.calculateAverageTransactionSpend();
 
@@ -271,7 +308,7 @@ public class PurchaseGUI extends JFrame {
                 JOptionPane.INFORMATION_MESSAGE);
     }
 
-
+    // EFFECTS: shows the purchase if found based on transaction id user input
     private void findPurchase() {
         String input = JOptionPane.showInputDialog(this, "Enter Transaction ID to find:");
         if (input != null && !input.isEmpty()) {
@@ -292,16 +329,17 @@ public class PurchaseGUI extends JFrame {
         }
     }
 
+    // EFFECTS: shows the splash loading screen to user
     private void showSplashScreen() {
         splashScreen = new JWindow();
         JLabel splashLabel = new JLabel();
 
-        // loading image
+        // load up image
         ImageIcon imageIcon = new ImageIcon("resources/img.png");
         int imageWidth = imageIcon.getIconWidth();
         int imageHeight = imageIcon.getIconHeight();
 
-        // icon with initial empty state
+        // make icon with initial empty state
         BufferedImage emptyImage = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_ARGB);
         splashLabel.setIcon(new ImageIcon(emptyImage));
 
@@ -315,56 +353,48 @@ public class PurchaseGUI extends JFrame {
         splashTimer(timerDelay, imageWidth, steps, imageHeight, imageIcon, splashLabel);
     }
 
+    // EFFECTS: helper method to set up splash screen timer
     private void splashTimer(int timerDelay, int imageWidth, int steps, int imageHeight,
                         ImageIcon imageIcon, JLabel splashLabel) {
         Timer timer = new Timer(timerDelay, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Calculate the width of the portion to reveal
+                // width calc of portion to reveal
                 int visibleWidth = (step * imageWidth) / steps;
 
-                // Create an image with the visible portion
+                // image create with visible portion
                 BufferedImage visibleImage = new BufferedImage(visibleWidth, imageHeight, BufferedImage.TYPE_INT_ARGB);
                 Graphics g = visibleImage.getGraphics();
                 g.drawImage(imageIcon.getImage(), 0, 0, visibleWidth, imageHeight, null);
 
-                // Update the label with the visible image
+                // update label with visible image
                 splashLabel.setIcon(new ImageIcon(visibleImage));
 
-                // Increment the step
                 step++;
 
-                // Stop the timer when the image is fully revealed
+                // stop when image is full revealed
                 if (step >= steps) {
                     ((Timer) e.getSource()).stop();
                 }
             }
         });
 
-        // Start the timer
         timer.setInitialDelay(0);
         timer.start();
     }
 
-
-    private void closeSplashScreen() {
-        splashScreen.dispose();
-    }
-
-    // Display all purchases in a pop-up
+    // EFFECTS: display all purchases in a pop-up
     private void displayAllPurchases() {
         if (listOfPurchases.viewListOfPurchases().isEmpty()) {
             JOptionPane.showMessageDialog(this, "No purchases to display.");
             return;
         }
 
-        // Build the string representation of all purchases
         StringBuilder purchasesText = new StringBuilder();
         for (Purchase purchase : listOfPurchases.viewListOfPurchases()) {
             purchasesText.append(purchase.toString()).append("\n");
         }
 
-        // Display the purchases in a pop-up dialog
         JTextArea textArea = new JTextArea(purchasesText.toString());
         textArea.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(textArea);
@@ -372,20 +402,17 @@ public class PurchaseGUI extends JFrame {
         JOptionPane.showMessageDialog(this, scrollPane, "All Purchases", JOptionPane.PLAIN_MESSAGE);
     }
 
+    // EFFECTS: asks user input for revenue goal and initializes list of purchases
     private void initializeListOfPurchases() {
-        // Prompt the user to enter the revenue goal
         String revenueGoalString = JOptionPane.showInputDialog("Enter Revenue Goal:");
         int revenueGoal = 0;
 
         revenueGoal = Integer.parseInt(revenueGoalString);
-
-        // Initialize ListOfPurchases with the user-provided revenue goal
         listOfPurchases = new ListOfPurchases(revenueGoal);
     }
 
-    // Method to handle adding a purchase
+    // EFFECTS: adding a purchase to lop based on user input
     private void addPurchase() {
-        // Prompt the user to enter Purchase details
         String transactionIdInput = JOptionPane.showInputDialog("Enter Transaction ID:");
         String customerName = JOptionPane.showInputDialog("Enter Customer Name:");
         String dayOfPurchaseInput = JOptionPane.showInputDialog("Enter Day of Purchase:");
@@ -393,12 +420,10 @@ public class PurchaseGUI extends JFrame {
         String transactionAmountInput = JOptionPane.showInputDialog("Enter Transaction Amount:");
 
         try {
-            // parsing inputs
             int transactionId = Integer.parseInt(transactionIdInput);
             int dayOfPurchase = Integer.parseInt(dayOfPurchaseInput);
             int transactionAmount = Integer.parseInt(transactionAmountInput);
 
-            // transactionID validation
             if (!(listOfPurchases.viewSpecificPurchase(transactionId) == null)) {
                 JOptionPane.showMessageDialog(this, "Transaction ID must be unique. Please enter a unique integer.");
                 return;
@@ -408,6 +433,7 @@ public class PurchaseGUI extends JFrame {
                     dayOfPurchase,itemsBought, transactionAmount);
             listOfPurchases.addPurchase(newPurchase);
             JOptionPane.showMessageDialog(this, "Purchase added successfully.");
+
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this,
                     "Invalid input. Please enter valid data types for Transaction ID, "
@@ -415,6 +441,7 @@ public class PurchaseGUI extends JFrame {
         }
     }
 
+    // EFFECTS: saves the list of purchases
     private void saveProgram() {
         try {
             jsonWriter = new JsonWriter("program_data.json");
@@ -427,6 +454,7 @@ public class PurchaseGUI extends JFrame {
         }
     }
 
+    // EFFECTS: loads the list of purchases
     private void loadProgram() {
         try {
             jsonReader = new JsonReader("program_data.json");
@@ -438,7 +466,7 @@ public class PurchaseGUI extends JFrame {
     }
 
 
-    // Method to handle removing a purchase
+    // EFFECTS: gets transaction id to remove purchase
     private void removePurchase() {
         boolean removed;
         String transactionIdInput = JOptionPane.showInputDialog("Enter Transaction ID to Remove:");
@@ -446,7 +474,6 @@ public class PurchaseGUI extends JFrame {
             return;
         }
 
-        // Parse the input as an integer
         int transactionIdToRemove;
         try {
             transactionIdToRemove = Integer.parseInt(transactionIdInput);
@@ -456,7 +483,6 @@ public class PurchaseGUI extends JFrame {
             return;
         }
 
-        // Attempt to remove the purchase with the specified transaction ID
         if (listOfPurchases.viewSpecificPurchase(transactionIdToRemove) == null) {
             removed = false;
         } else {
@@ -464,10 +490,10 @@ public class PurchaseGUI extends JFrame {
             removed = true;
         }
 
-        // Display the result to the user
         removeOutput(removed, transactionIdToRemove);
     }
 
+    // EFFECTS: outputs the purchase removed, otherwise
     private void removeOutput(boolean removed, int transactionIdToRemove) {
         if (removed) {
             JOptionPane.showMessageDialog(this,
@@ -478,14 +504,13 @@ public class PurchaseGUI extends JFrame {
         }
     }
 
-    // Enhanced loading screen with a progress bar
+    // EFFECTS: shows the loading screen to the user
     private void showLoadingScreen() {
-        // Create a progress bar
         int duration = 2000;
         progressBar = new JProgressBar(0, 100);
         progressBar.setStringPainted(true);
 
-        // Create a dialog to display the loading screen
+
         loadingDialog = new JDialog(this, "Loading", true);
         loadingDialog.setLayout(new BorderLayout());
         loadingDialog.add(new JLabel("Your personal purchase manager is loading..."), BorderLayout.NORTH);
@@ -498,8 +523,9 @@ public class PurchaseGUI extends JFrame {
         loadingTimer(duration);
     }
 
+    // EFFECTS: sets up the timer for loading screen for specific duration
     private void loadingTimer(int duration) {
-        int timerDelay = duration / 100; // update 1% of the duration
+        int timerDelay = duration / 100;
         int steps = 100;
         int increment = progressBar.getMaximum() / steps;
 

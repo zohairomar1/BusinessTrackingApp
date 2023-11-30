@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -41,6 +42,24 @@ class ListOfPurchasesTest {
         assertFalse(testPurchase.getItemsBought().isEmpty());
 
     }
+
+    @Test
+    void testToString() {
+        testListOfPurchases.addPurchase(testPurchase);
+        testListOfPurchases.addPurchase(testPurchase2);
+
+        assertEquals((testPurchase.toString() + testPurchase2.toString()),testListOfPurchases.toString());
+    }
+
+//    @Test
+//    void listTest() {
+//        ArrayList<Purchase> loppp = new ArrayList<Purchase>();
+//
+//        loppp.add(testPurchase);
+//        loppp.add(testPurchase2);
+//
+//        assertEquals((testPurchase.toString() + testPurchase2.toString()), testListOfPurchases.listToString(loppp));
+//    }
 
     @Test
     void testSingleAddPurchase() {

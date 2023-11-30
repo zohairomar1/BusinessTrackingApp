@@ -1,5 +1,6 @@
 package ui;
 
+import model.Event;
 import model.ListOfPurchases;
 import model.Purchase;
 import persistance.JsonReader;

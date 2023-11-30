@@ -42,6 +42,18 @@
             "dayOfPurchase": 10,
             "transactionID": 66,
             "customerName": "travis"
+        },
+        {
+            "transactionAmount": 299,
+            "itemsBought": [
+                "items",
+                "tesm",
+                "s",
+                "s"
+            ],
+            "dayOfPurchase": 99,
+            "transactionID": 200,
+            "customerName": "wa"
         }
     ]
 }
