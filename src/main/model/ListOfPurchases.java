@@ -158,7 +158,11 @@ public class ListOfPurchases implements Writable {
 
     // EFFECTS: calculate the average amount spent per transaction in list
     public float calculateAverageTransactionSpend() {
-        int totalSpending = this.calculateRevenue();
+        int totalSpending = 0;
+
+        for (Purchase p : listOfPurchases) {
+            totalSpending = totalSpending + p.getTransactionAmount();
+        }
         EventLog.getInstance().logEvent(new Event("The average transaction spending was calculated as: $"
                 + (float) totalSpending / (listOfPurchases.size())));
         return (float) totalSpending / (listOfPurchases.size());
@@ -189,7 +193,7 @@ public class ListOfPurchases implements Writable {
         String stringAcc = "";
 
         for (Purchase p : listOfPurchases) {
-            stringAcc += (p.toString());
+            stringAcc += (p.toString()) + "\n";
         }
 
         return stringAcc;

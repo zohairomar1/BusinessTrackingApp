@@ -23,12 +23,12 @@ import java.util.Arrays;
 public class PurchaseGUI extends JFrame {
 
     private ListOfPurchases listOfPurchases;
-    private Purchase testPurchase;
-    private Purchase testPurchase2;
-    private Purchase testPurchase3;
-    private Purchase testPurchase4;
-    private Purchase testPurchase5;
-    private Purchase testPurchase6;
+//    private Purchase testPurchase;
+//    private Purchase testPurchase2;
+//    private Purchase testPurchase3;
+//    private Purchase testPurchase4;
+//    private Purchase testPurchase5;
+//    private Purchase testPurchase6;
 
     private JProgressBar progressBar;
     private JDialog loadingDialog;
@@ -44,18 +44,19 @@ public class PurchaseGUI extends JFrame {
         showSplashScreen();
         showMainFrame();
 
-        testPurchase = new Purchase(1,"zohair",2,new ArrayList<>(), 10);
-        testPurchase2 = new Purchase(2,"gregor",3,new ArrayList<>(), 20);
-        testPurchase3 = new Purchase(33,"paul",5,new ArrayList<>(), 30);
-        testPurchase4 = new Purchase(44,"drake",7,new ArrayList<>(), 40);
-        testPurchase5 = new Purchase(55,"yeat",9,new ArrayList<>(), 20);
-        testPurchase6 = new Purchase(66,"travis",10,new ArrayList<>(), 17);
-        listOfPurchases.addPurchase(testPurchase);
-        listOfPurchases.addPurchase(testPurchase2);
-        listOfPurchases.addPurchase(testPurchase3);
-        listOfPurchases.addPurchase(testPurchase4);
-        listOfPurchases.addPurchase(testPurchase5);
-        listOfPurchases.addPurchase(testPurchase6);
+        // examples for TA
+//        testPurchase = new Purchase(1,"zohair",2,new ArrayList<>(), 10);
+//        testPurchase2 = new Purchase(2,"gregor",3,new ArrayList<>(), 20);
+//        testPurchase3 = new Purchase(33,"paul",5,new ArrayList<>(), 30);
+//        testPurchase4 = new Purchase(44,"drake",7,new ArrayList<>(), 40);
+//        testPurchase5 = new Purchase(55,"yeat",9,new ArrayList<>(), 20);
+//        testPurchase6 = new Purchase(66,"travis",10,new ArrayList<>(), 17);
+//        listOfPurchases.addPurchase(testPurchase);
+//        listOfPurchases.addPurchase(testPurchase2);
+//        listOfPurchases.addPurchase(testPurchase3);
+//        listOfPurchases.addPurchase(testPurchase4);
+//        listOfPurchases.addPurchase(testPurchase5);
+//        listOfPurchases.addPurchase(testPurchase6);
     }
 
 
