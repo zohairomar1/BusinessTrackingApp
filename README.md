@@ -2,6 +2,10 @@
 
 ## *A java program that helps retailers with tracking and analysing customer purchases*
 
+<p> To run: git clone https://github.com/zohairomar1/BusinessTrakingApp
+<p>         Run main.PurchaseGUI 
+        
+
 <p> My application allows a retail business to enter customer purchases and information based on receipts. I plan to add features that help retail businesses view and analyse their business operations. My application will offer features such as the ability to view the total money spent, track the amount of goods purchased, set a revenue goal and view progress etc.
 
 ## User Stories
